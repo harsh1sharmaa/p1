@@ -4,6 +4,7 @@ const createError = require("http-errors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const redis = require("redis");
 const app = express();
 
 // view engine setup
@@ -18,8 +19,8 @@ app.use(cookieParser());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-
-
+const { Connection } = require('./models/connection');
+Connection.open();
   const indexRouter = require("./route/ index");
   const usersRouter = require("./route/ users");
   const catalogRouter = require("./route/catalog"); //Import routes for "catalog" area of site
