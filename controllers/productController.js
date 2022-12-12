@@ -1,16 +1,22 @@
 const productComponent = require("../components/product");
 const getProducts = async (req, res) => {
+  // res.send("hello world!");
   let response = await productComponent.getProducts();
   if (response.success == true) {
     res.send({ success: true, data: response.data });
   } else {
-    res.send({ success: false, data: response.data });
+    res.send({ success: false, data: response.message });
   }
 };
 
-const getSingleProducts = (req, res) => {
+const getSingleProducts = async (req, res) => {
   let data = req.params;
-  res.send(productComponent.getSingleProducts(data));
+  let response = await productComponent.getSingleProducts(data);
+  if (response.success) {
+    res.send({ success: true, data: response.data });
+  } else {
+    res.send({ success: false, message: response.message });
+  }
 };
 const createProduct = (req, res) => {
   let data = req.body;
