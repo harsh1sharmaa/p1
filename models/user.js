@@ -7,8 +7,12 @@ const saveUser = async (data) => {
   let email = data.email;
   let password = data.password;
   let name = data.name;
+  let mobile = data.phone;
   Connection.open();
   password = await helper.hashPassword(password);
+  if (password === undefined) {
+    return { success: false, message: "some error" };
+  }
   let UUID = helper.createUUID(15);
   console.log(UUID);
   console.log("in models password hash");
@@ -19,6 +23,7 @@ const saveUser = async (data) => {
       userId: UUID,
       name: name,
       email: email,
+      mobile: mobile,
       password: password,
       userstatus: "inactive",
       role: "user",
@@ -52,7 +57,7 @@ const updateUserStatus = async (email, status) => {
     console.log("user update");
     console.log(dbResponse);
 
-    if (dbResponse.acknowledged) {
+    if (dbResponse !== undefined && dbResponse.acknowledged) {
       return { success: true, data: dbResponse };
     } else {
       return { success: false, message: "User not Update" };

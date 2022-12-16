@@ -3,6 +3,9 @@ const checkEmailExist = async (email, collectionName) => {
   console.log("in helper function email");
   console.log(email);
   Connection.open();
+  if (email.trim().length == 0) {
+    return { success: false, message: "email is empty" };
+  }
   try {
     const collection = Connection.conn.db("test").collection(collectionName);
     let dbResponse = await collection.find({ email: email }).toArray();

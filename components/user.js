@@ -8,14 +8,14 @@ const register = async (data) => {
   console.log("isUserPresent");
   console.log(isUserPresent);
 
-  if (isUserPresent.success) {
+  if (isUserPresent === undefined || isUserPresent.success == false) {
     return { success: false, message: isUserPresent.message };
   }
   let response = await user.saveUser(data);
 
   console.log("response in componet");
   console.log(response);
-  if (response.success) {
+  if (response !== undefined && response.success) {
     return { success: true, data: response.data };
   } else {
     return { success: true, data: response.message };
@@ -24,7 +24,7 @@ const register = async (data) => {
 
 const validateUser = async (data) => {
   let userResponse = await user.validateLogin(data);
-  if (userResponse.success) {
+  if (userResponse !== undefined && userResponse.success) {
     return { success: true, data: userResponse.data };
   } else {
     return { success: false, message: userResponse.message };

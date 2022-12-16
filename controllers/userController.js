@@ -5,36 +5,55 @@ const sendMail = require("../components/sendMail");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "SampleKey";
 const register = async (req, res) => {
+  console.log("register");
   let email = req.body.email;
+  let password = req.body.password;
+  let Rpassword = req.body.RePassword;
+  let mobile = req.body.phone;
+
+  if (
+    password === undefined ||
+    Rpassword === undefined ||
+    password.trim() !== Rpassword.trim()
+  ) {
+    res.send({ success: false, message: "Password not Same" });
+  }
+  if (
+    email === undefined ||
+    email.trim() == "" ||
+    mobile === undefined ||
+    mobile.trim() == ""
+  ) {
+    res.send({ success: false, message: "Password not Same" });
+  }
   let validateEmailResponse = auth.validateEmail(email);
   if (!validateEmailResponse) {
     res.send({ success: false, message: "invalid email" });
   }
-  // console.log("validateEmailResponse");
-  // console.log(validateEmailResponse);
+
   let userResponse = await user.register(req.body);
-  console.log("userResponse in controller");
-  console.log(userResponse);
+  // console.log("userResponse in controller");
+  // console.log(userResponse);
   if (!userResponse.success) {
     res.send({ success: false, message: userResponse.message });
   } else {
-    console.log("in else part user controller");
-    // let otpResponse = await sendSms.sendSMS(email);
-    let mailResponse = await sendMail.sendMail(email);
-    console.log("mailResponse in controller");
-    console.log(mailResponse);
-    if (mailResponse.success) {
-      res.send({ success: true, data: "mail send successfully" });
-    } else {
-      res.send({ success: false, message: mailResponse.message });
-    }
-    // console.log("inside if otpResponse");
-    // console.log(otpResponse);
-    // if (otpResponse.success) {
-    //   res.send({ success: true, data: "OTP send successfully" });
+    // console.log("in else part user controller");
+    let otpResponse = await sendSms.sendSMS(mobile, email);
+    // let mailResponse = await sendMail.sendMail(email);
+    // console.log("mailResponse in controller");
+    // console.log(mailResponse);
+    // if (mailResponse.success) {
+    //   res.send({ success: true, data: "mail send successfully" });
     // } else {
-    //   res.send({ success: false, message: otpResponse.message });
+    //   res.send({ success: false, message: mailResponse.message });
     // }
+    console.log("inside if otpResponse");
+    console.log(otpResponse);
+    if (otpResponse.success) {
+      res.send({ success: true, data: "OTP send successfully" });
+    } else {
+      res.send({ success: false, message: otpResponse.message });
+    }
   }
 };
 
@@ -78,6 +97,7 @@ function generateAccessToken(username, userId, role) {
     expiresIn: 60 * 60,
   });
 }
+// {   "DateTime": {    "$date": "2022-12-16T06:54:36.445Z"  },  "email": "Harsh232@gmail.com",  "otp": 973837}
 
 const validateOtp = async (req, res) => {
   let data = req.body;

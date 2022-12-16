@@ -1,31 +1,45 @@
 const product = require("../models/product");
 const makrApiCall = require("./APIcall");
 const sendSMS = require("./sendSMS");
+
+/**
+ * this funtion return All products
+ * @returns
+ */
 const getProducts = async () => {
   let response = await product.get();
-  // let response = await sendSMS.sendSMS();
-  // console.log("response in get products")
-  // console.log(response)
-  // if (response.success) {
-  // process.exit(0);
-  // makrApiCall.callAPI("GET", "https://api.github.com/users", {});
-  // console.log("Product components successfully");
-  if (response.success) {
-    
+  if (response === undefined) {
+    return { success: false, message: "error in getting products" };
+  }
+  if ( response.success) {
     return { success: true, data: response.data };
   } else {
     return { success: false, message: response.message };
   }
 };
+
+/**
+ * this funtion return Single Product
+ * @param {*} data
+ * @returns
+ */
 const getSingleProducts = async (data) => {
   let response = await product.getSingleProduct(data);
+  if (response === undefined) {
+    return { success: false, message: "error in getting Single product" };
+  }
   if (response.success) {
     return { success: true, data: response.data };
   } else {
     return { success: false, message: response.message };
   }
-  return { success: true, data: "single  products with id " + data.productId };
 };
+
+/**
+ * this funtion use to create Product
+ * @param {*} data
+ * @returns
+ */
 const createProduct = (data) => {
   return { success: true, data: data };
 };
