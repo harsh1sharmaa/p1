@@ -5,7 +5,6 @@ const sendMail = require("../components/sendMail");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "SampleKey";
 const register = async (req, res) => {
-  console.log("register");
   let email = req.body.email;
   let password = req.body.password;
   let Rpassword = req.body.RePassword;
@@ -32,8 +31,6 @@ const register = async (req, res) => {
   }
 
   let userResponse = await user.register(req.body);
-  // console.log("userResponse in controller");
-  // console.log(userResponse);
   if (!userResponse.success) {
     res.send({ success: false, message: userResponse.message });
   } else {
@@ -56,7 +53,7 @@ const register = async (req, res) => {
     }
   }
 };
-
+//  +917248314681
 const login = async (req, res) => {
   // let cocke=req.cookies['token'];  // code for getting cookies from frontend
   console.log("in login");

@@ -3,17 +3,18 @@ const mongoose = require("mongoose");
 const createError = require("http-errors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const logger = require("morgan");
+// const logger = require("morgan");
 const cors = require("cors");
 const redis = require("redis");
 const app = express();
 const globalMiddleware = require("./middlewares/auth");
+const logger = require("./config/Logger");
 
 // view engine setup
 app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-app.use(logger("dev"));
+// app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -25,6 +26,23 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 const { Connection } = require("./models/connection");
 Connection.open();
+app.use((req, res, next) => {
+  logger.info(
+    `incoming Request URL = ${
+      req.url
+    } , incoming Request body =${JSON.stringify(req.body)}`
+  );
+  let oldSend = res.send;
+  res.send = function (data) {
+    logger.info(`response Request body =${JSON.stringify(data)}`);
+    oldSend.apply(res, arguments);
+  };
+  next();
+});
+console.log("dbResponse")
+console.log(
+  new Date()
+);
 const indexRouter = require("./route/ index");
 const usersRouter = require("./route/ users");
 const catalogRouter = require("./route/catalog"); //Import routes for "catalog" area of site
@@ -43,7 +61,7 @@ app.use("/store/", orderRouter);
 app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain.
 
 app.listen(4000, () => {
-  console.log("listening on port");
+  console.log("info", "listening on port");
 });
 
 module.exports = app;

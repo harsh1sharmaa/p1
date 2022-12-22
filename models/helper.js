@@ -8,7 +8,7 @@ const checkEmailExist = async (email, collectionName) => {
   }
   try {
     const collection = Connection.conn.db("test").collection(collectionName);
-    let dbResponse = await collection.find({ email: email }).toArray();
+    let dbResponse = await collection.find({ email: email ,userstatus:"active"}).toArray();
     console.log("dbResponse");
     console.log(dbResponse.length);
     if (dbResponse.length > 0) {

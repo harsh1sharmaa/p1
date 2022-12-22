@@ -36,7 +36,7 @@ const saveUser = async (data) => {
   } catch (error) {
     console.log(error);
     return { sucess: false, message: error };
-    // res.status(500).json({ error });
+    // res.status(500).json({ error });\
   }
 };
 
@@ -70,6 +70,7 @@ const updateUserStatus = async (email, status) => {
 };
 
 const validateLogin = async (data) => {
+  
   const collection = Connection.conn.db("test").collection("userdetails");
   let email = data.email;
   let password = data.password;

@@ -5,20 +5,22 @@ const register = async (data) => {
     data.email,
     "userdetails"
   );
-  console.log("isUserPresent");
-  console.log(isUserPresent);
-
-  if (isUserPresent === undefined || isUserPresent.success == false) {
+  // console.log("isUserPresent");
+  // console.log(isUserPresent);
+  if (isUserPresent === undefined) {
+    return { success: false, message: "error in checking user present or not" };
+  }
+  if (isUserPresent.success) {
     return { success: false, message: isUserPresent.message };
   }
   let response = await user.saveUser(data);
 
-  console.log("response in componet");
-  console.log(response);
+  // console.log("response in componet");
+  // console.log(response);
   if (response !== undefined && response.success) {
     return { success: true, data: response.data };
   } else {
-    return { success: true, data: response.message };
+    return { success: false, data: response.message };
   }
 };
 
