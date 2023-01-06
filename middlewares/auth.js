@@ -9,6 +9,10 @@ const globalMiddleware = (req, res, next) => {
   // console.log(JSON.stringify(req.headers.authorization));
   // const authHeader = JSON.stringify(req.headers.authorization);
   const tokenHeader = req.headers["authorization"];
+  if(tokenHeader===undefined){
+    return res.json({success: false , message: "Token not found." });
+
+  }
   console.log("tokenHeader");
   console.log(tokenHeader);
 
@@ -17,7 +21,7 @@ const globalMiddleware = (req, res, next) => {
   jwt.verify(token2, SECRET_KEY, (err, decoded) => {
     if (err) {
       console.log("error:", err);
-      return res.json({ mensaje: "Invalid Token." });
+      return res.json({ message: "Invalid Token." });
     } else {
       // console.log("decoded----");
       // console.log(decoded.userId);
@@ -61,7 +65,7 @@ const adminMiddleware = (req, res, next) => {
   jwt.verify(token2, SECRET_KEY, (err, decoded) => {
     if (err) {
       console.log("error:", err);
-      return res.json({ message: "Invalid Token." });
+      return res.json({ success:"true", message: "Invalid Token." });
     } else {
       console.log("decoded----");
       console.log(decoded);
@@ -75,7 +79,7 @@ const adminMiddleware = (req, res, next) => {
      
         next();
       } else {
-        return res.json({ message: "not authorized" });
+        return res.json({ success:"true", message: "not authorized" });
       }
     }
   });

@@ -9,14 +9,17 @@ const redis = require("redis");
 const app = express();
 const globalMiddleware = require("./middlewares/auth");
 const logger = require("./config/Logger");
+const bodyParser = require('body-parser');
 
 // view engine setup
 app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 // app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json()); //Handles JSON requests
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 let request = require("request");
 app.use(cookieParser());

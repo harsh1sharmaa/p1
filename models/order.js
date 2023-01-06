@@ -42,6 +42,11 @@ const create = async (data) => {
 
   let uniqueOrderId = helper.createUUID(5);
   // console.log(uniqueOrderId);
+  let totelPrice=0;
+  for(let i = 0; i < data['items'].length; i++) {
+    totelPrice=totelPrice+parseInt(data['items'][i].price)*parseInt(data['items'][i].quantity);
+  }
+  console.log(data);
   let userId = global.userId;
   let email = global.email;
   let orderData = {
@@ -49,7 +54,8 @@ const create = async (data) => {
     id: uniqueOrderId,
     userId: userId,
     userEmail: email,
-    item: [data],
+    item: data['items'],
+    totelPrice: totelPrice
   };
   // console.log("userId");
   // console.log(userId);

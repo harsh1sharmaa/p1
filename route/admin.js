@@ -9,6 +9,7 @@ const adminController=require("../controllers/adminController")
 router.get("/info", adminController.info);
 router.get("/orders", adminController.getOrders);
 router.post("/updateorderstatus", adminController.updateOrderStatus);
+router.post("/updateproduct", adminController.updateProduct);
 // router.post("/validateotp", userController.validateOtp);
 
 // router.get("/getuser", (req, res, next) => {

@@ -15,7 +15,7 @@ const register = async (req, res) => {
     Rpassword === undefined ||
     password.trim() !== Rpassword.trim()
   ) {
-    res.send({ success: false, message: "Password not Same" });
+   return res.send({ success: false, message: "Password not Same" });
   }
   if (
     email === undefined ||
@@ -23,16 +23,16 @@ const register = async (req, res) => {
     mobile === undefined ||
     mobile.trim() == ""
   ) {
-    res.send({ success: false, message: "Password not Same" });
+   return res.send({ success: false, message: "Password not Same" });
   }
   let validateEmailResponse = auth.validateEmail(email);
   if (!validateEmailResponse) {
-    res.send({ success: false, message: "invalid email" });
+   return res.send({ success: false, message: "invalid email" });
   }
 
   let userResponse = await user.register(req.body);
   if (!userResponse.success) {
-    res.send({ success: false, message: userResponse.message });
+ return    res.send({ success: false, message: userResponse.message });
   } else {
     // console.log("in else part user controller");
     let otpResponse = await sendSms.sendSMS(mobile, email);
@@ -47,9 +47,9 @@ const register = async (req, res) => {
     console.log("inside if otpResponse");
     console.log(otpResponse);
     if (otpResponse.success) {
-      res.send({ success: true, data: "OTP send successfully" });
+      return res.send({ success: true, data: "OTP send successfully" });
     } else {
-      res.send({ success: false, message: otpResponse.message });
+     return  res.send({ success: false, message: otpResponse.message });
     }
   }
 };
@@ -59,7 +59,7 @@ const login = async (req, res) => {
   console.log("in login");
   let email = req.body.email;
   if (!auth.validateEmail(email)) {
-    res.send("invalid Email");
+   return  res.send({ success: false, message: "invalid email" });
   }
   console.log("in user controller");
   console.log(req.body);
@@ -68,7 +68,7 @@ const login = async (req, res) => {
   console.log(userValidateResponse);
 
   if (!userValidateResponse.success) {
-    res.send({ success: false, message: userValidateResponse.message });
+return    res.send({ success: false, message: userValidateResponse.message });
   } else {
     console.log("userValidateResponse in controller");
     console.log(userValidateResponse);
@@ -78,12 +78,12 @@ const login = async (req, res) => {
     if (userValidateResponse.success) {
       let Token = generateAccessToken(email, userId, role);
       res.cookie("token", Token); //set
-      res.send({
+     return res.send({
         success: true,
-        data: { message: userValidateResponse.data.message, token: Token },
+        data: { message: userValidateResponse.data.message, token: Token ,role:role },
       });
     } else {
-      res.send({ success: false, message: userValidateResponse.message });
+     return res.send({ success: false, message: userValidateResponse.message });
     }
   }
 };
@@ -102,9 +102,9 @@ const validateOtp = async (req, res) => {
   console.log(data);
   let response = await auth.validateOtpHelper(data);
   if (response.success) {
-    res.send({ success: true, data: response.data });
+   return res.send({ success: true, data: response.data });
   } else {
-    res.send({ success: false, message: response.message });
+  return  res.send({ success: false, message: response.message });
   }
 };
 

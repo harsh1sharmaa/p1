@@ -70,7 +70,49 @@ const updateOrderStatus = async (data) => {
     //   return { success: false, message: "data not found" };
     // }
     // let user_detail = validateResponse[0];
-    return { success: true, data: Response };
+    if (Response.acknowledged && Response.modifiedCount > 0) {
+      return { success: true, data: "update Success" };
+    } else {
+      return { success: true, data: "already updated " };
+    }
+  } catch (error) {
+    console.log(error);
+    return { sucess: false, message: error };
+    // res.status(500).json({ error });
+  }
+};
+const updateProduct = async (data) => {
+  const collection = Connection.conn.db("test").collection("product");
+  //   let userId = global.userId;
+  console.log("in admin models ");
+  console.log(data);
+
+  try {
+    let Response = await collection.updateOne(
+      {
+        id: data.productId,
+      },
+
+      {
+        $set: {
+          price: data.price,
+          discountPercentage: data.discountPercentage,
+          stock: data.stock,
+        },
+      }
+    );
+
+    console.log("validate Response in models ");
+    console.log(Response);
+    // if (validateResponse.length == 0) {
+    //   return { success: false, message: "data not found" };
+    // }
+    // let user_detail = validateResponse[0];
+    if (Response.acknowledged && Response.modifiedCount > 0) {
+      return { success: true, data: "update Success" };
+    } else {
+      return { success: true, data: "already updated " };
+    }
   } catch (error) {
     console.log(error);
     return { sucess: false, message: error };
@@ -78,4 +120,4 @@ const updateOrderStatus = async (data) => {
   }
 };
 
-module.exports = { getAdmin, getAllOrders, updateOrderStatus };
+module.exports = { getAdmin, getAllOrders, updateOrderStatus, updateProduct };

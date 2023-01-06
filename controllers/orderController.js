@@ -20,13 +20,13 @@ const getSingleOrder = async (req, res) => {
     }
 };
 const createOrder = async (req, res) => {
-  // res.send("hello world!");
+  // return res.send("hello world!");
   let data = req.body;
   let response = await orderComponent.createOrder(data);
   if (response.success) {
-    res.send({ success: true, data: response.data });
+   return  res.send({ success: true, data: "Order Place success your order Id is : "+ response.data.orderId });
   } else {
-    res.send({ success: false, message: response.message });
+    return  res.send({ success: false, message: response.message });
   }
 //   res.send(orderComponent.createOrder(data));
 };
