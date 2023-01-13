@@ -82,27 +82,32 @@ const updateOrderStatus = async (data) => {
   }
 };
 const updateProduct = async (data) => {
-  const collection = Connection.conn.db("test").collection("product");
+  const collection = Connection.conn.db("test").collection("products");
   //   let userId = global.userId;
   console.log("in admin models ");
   console.log(data);
 
+  let productId = parseInt(data.productId);
+  let price = parseFloat(data.price);
+  let discountPercentage = parseFloat(data.discountPercentage);
+  let stock = parseInt(data.stock);
+
   try {
     let Response = await collection.updateOne(
       {
-        id: data.productId,
+        id: productId,
       },
 
       {
         $set: {
-          price: data.price,
-          discountPercentage: data.discountPercentage,
-          stock: data.stock,
+          price: price,
+          discountPercentage: discountPercentage,
+          stock: stock,
         },
       }
     );
 
-    console.log("validate Response in models ");
+    console.log("update product Response in models ");
     console.log(Response);
     // if (validateResponse.length == 0) {
     //   return { success: false, message: "data not found" };

@@ -37,8 +37,7 @@ const getAllOrders = async () => {
   }
 };
 const updateOrderStatus = async (data) => {
-    // console.log("global.role");
-  //   console.log(global.role);
+    
   let userResponse = await admin.updateOrderStatus(data);
   if (userResponse === undefined) {
     return { success: false, message: "error in updateOrderStatus" };
@@ -50,10 +49,11 @@ const updateOrderStatus = async (data) => {
     return { success: false, message: userResponse.message };
   }
 };
-const updateProduct = async (data) => {
-  return { success: true, data: data };
 
+
+const updateProduct = async (data) => {
   let userResponse = await admin.updateProduct(data);
+  console.log("userResponse,",userResponse)
   if (userResponse === undefined) {
     return { success: false, message: "error in update product" };
   }

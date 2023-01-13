@@ -3,8 +3,10 @@ const helperModel = require("../models/helper");
 const register = async (data) => {
   let isUserPresent = await helperModel.checkEmailExist(
     data.email,
-    "userdetails"
+    "userdetails",
+    {userstatus:"active"}
   );
+ 
   // console.log("isUserPresent");
   // console.log(isUserPresent);
   if (isUserPresent === undefined) {
@@ -13,10 +15,15 @@ const register = async (data) => {
   if (isUserPresent.success) {
     return { success: false, message: isUserPresent.message };
   }
+  let isInactiveUserPresent = await helperModel.checkcheckEmailInInactiveUser(
+    data.email,
+    "userdetails"
+  );
+  // console.log("isInactiveUserPresent",isInactiveUserPresent);
+  if(isInactiveUserPresent.success){
+    return { success: true, data: "inactive user present" };
+  }
   let response = await user.saveUser(data);
-
-  // console.log("response in componet");
-  // console.log(response);
   if (response !== undefined && response.success) {
     return { success: true, data: response.data };
   } else {

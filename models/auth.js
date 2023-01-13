@@ -13,12 +13,11 @@ const get = async (req, res) => {
     // res.status(500).json({ error });
   }
 };
-
 const saveOtp = async (data) => {
   Connection.open();
   try {
     const collection = Connection.conn.db("test").collection("otp");
-    collection.createIndex({ DateTime: 1 }, { expireAfterSeconds: 1 });
+    collection.createIndex({ DateTime: 1 }, { expireAfterSeconds: 600 });
     // let isEmailPresent = await collection
     //   .find({ useremail: data.useremail })
     //   .toArray();
@@ -29,6 +28,26 @@ const saveOtp = async (data) => {
       DateTime: new Date(),
       ...data,
     });
+    console.log("dbResponse");
+    console.log(dbResponse);
+    if (dbResponse.acknowledged) {
+      return { success: true, data: dbResponse };
+    } else {
+      return { success: false, message: "otp not saved" };
+    }
+    // res.json({ result: result });
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: error };
+    // res.status(500).json({ error });
+  }
+};
+const updateOTP = async (data) => {
+  Connection.open();
+  try {
+    const collection = Connection.conn.db("test").collection("otp");
+    collection.createIndex({ DateTime: 1 }, { expireAfterSeconds: 600 });
+    let dbResponse = await collection.updateOne({email:data.email},{$set:{DateTime:new Date(),otp:data.otp}});
     console.log("dbResponse");
     console.log(dbResponse);
     if (dbResponse.acknowledged) {
@@ -94,4 +113,4 @@ const checkEmailExist = async (email) => {
   }
 };
 
-module.exports = { get, saveOtp, validateOtp, checkEmailExist };
+module.exports = { get, saveOtp, validateOtp, checkEmailExist, updateOTP };

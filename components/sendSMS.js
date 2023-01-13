@@ -9,21 +9,22 @@ const helperModel = require("../models/helper");
  * @returns
  */
 const sendSMS = async (Phone, email) => {
-  // let isEmailPresent = await otpCollection.checkEmailExist(email);
-  let isEmailPresent = await helperModel.checkEmailExist(email, "otp");
-  if (isEmailPresent === undefined) {
-    return { success: false, message: "error in Check Email" };
-  }
-  if (isEmailPresent.success) {
-    return { success: false, message: isEmailPresent.message };
-  }
-  // if(typeof isEmailPresent.message!==undefined){
-  //   return { success:false, message: "server issue plz try again" };
-  // }
   let OTP = genrateOTP(5);
   // let OTP = "54674";
   console.log("OTP" + OTP);
-  let dbResponse = await otpCollection.saveOtp({ email: email, otp: OTP });
+  // let isEmailPresent = await otpCollection.checkEmailExist(email);
+  let isEmailPresent = await helperModel.checkEmailExist(email, "otp", {});
+  console.log("isEmailPresent", isEmailPresent);
+  if (isEmailPresent === undefined) {
+    return { success: false, message: "error in Check Email" };
+  }
+  let dbResponse;
+  if (isEmailPresent.success) {
+    // return { success: false, message: isEmailPresent.message };
+    dbResponse = await otpCollection.updateOTP({ email: email, otp: OTP });
+  } else {
+    dbResponse = await otpCollection.saveOtp({ email: email, otp: OTP });
+  }
   console.log("dbResponse in sendSMS");
   console.log(dbResponse);
   if (isEmailPresent === undefined) {
@@ -32,8 +33,8 @@ const sendSMS = async (Phone, email) => {
   if (!dbResponse.success) {
     return { success: false, message: "error from server side" };
   }
-
-  return { success: true, data: "send" };
+  console.log(Phone);
+  // return { success: true, data: "send" };
   let client = new plivo.Client(
     "MAM2M3NJY5NWYWYWY4MZ",
     "NWJmMmM2YjIyZGMwM2M1MTdiZTdiZDIyYWZiZjNk"

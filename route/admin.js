@@ -6,6 +6,7 @@ const adminController=require("../controllers/adminController")
 // router.get("/", (req, res, next) => {
 //   res.send("respond with a resource");
 // });
+
 router.get("/info", adminController.info);
 router.get("/orders", adminController.getOrders);
 router.post("/updateorderstatus", adminController.updateOrderStatus);
